@@ -1,0 +1,1 @@
+exports.identityDocsValidation = require('./identitydocs')

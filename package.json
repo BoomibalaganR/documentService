@@ -1,0 +1,37 @@
+{
+  "name": "documentservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "jest --detectOpenHandles",
+    "start": "nodemon src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^7.11.2",
+    "@joi/date": "^2.1.1",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validation": "^4.1.0",
+    "firebase-admin": "^12.2.0",
+    "helmet": "^7.1.0",
+    "http-status": "^1.7.4",
+    "joi": "^17.13.1",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongoose": "^8.3.5",
+    "multer": "^1.4.5-lts.1",
+    "re": "^0.1.4",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "node-mocks-http": "^1.15.0",
+    "supertest": "^7.0.0"
+  }
+}
