@@ -1,5 +1,5 @@
 const httpStatus = require('http-status')
-const catchAsync = require('../utils/catchAsync')
+const { catchAsync } = require('../utils/catchAsync')
 const { identitydocumentService } = require('../services')
 
 /**
@@ -8,7 +8,7 @@ const { identitydocumentService } = require('../services')
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  */
-exports.getAllIdentityDocuments = catchAsync(async (req, res) => {
+exports.getAllIdentityDocuments = catchAsync(async (req, res, next) => {
 	const cofferId = req.user.coffer_id
 	const category = req.params.cat
 
@@ -26,7 +26,7 @@ exports.getAllIdentityDocuments = catchAsync(async (req, res) => {
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  */
-exports.getIdentityDocumentByDocType = catchAsync(async (req, res) => {
+exports.getIdentityDocumentByDocType = catchAsync(async (req, res, next) => {
 	const cofferId = req.user.coffer_id
 	const docType = req.params.doctype
 	const category = req.params.cat
@@ -46,7 +46,7 @@ exports.getIdentityDocumentByDocType = catchAsync(async (req, res) => {
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  */
-exports.addIdentityDocument = catchAsync(async (req, res) => {
+exports.addIdentityDocument = catchAsync(async (req, res, next) => {
 	const cofferId = req.user.coffer_id
 
 	const data = await identitydocumentService.addIdentityDocument(
@@ -63,7 +63,7 @@ exports.addIdentityDocument = catchAsync(async (req, res) => {
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  */
-exports.updateIdentityDocument = catchAsync(async (req, res) => {
+exports.updateIdentityDocument = catchAsync(async (req, res, next) => {
 	const cofferId = req.user.coffer_id
 	const docType = req.params.doctype
 	const category = req.params.cat
@@ -84,12 +84,12 @@ exports.updateIdentityDocument = catchAsync(async (req, res) => {
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  */
-exports.deleteIdentityDocument = catchAsync(async (req, res) => {
+exports.deleteIdentityDocument = catchAsync(async (req, res, next) => {
 	const cofferId = req.user.coffer_id
 	const docType = req.params.doctype
 	const category = req.params.cat
 
-	const data = await identitydocumentService.deleteIdentityDocumentByDoc_type(
+	const data = await identitydocumentService.deleteIdentityDocumentByDocType(
 		cofferId,
 		category,
 		docType

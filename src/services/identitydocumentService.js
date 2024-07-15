@@ -1,6 +1,7 @@
 const ApiError = require('../utils/ApiError')
 const logger = require('../../config/logger')
 const { IdentityDocument } = require('../models')
+
 const httpStatus = require('http-status')
 const moment = require('moment')
 
@@ -74,11 +75,14 @@ exports.addIdentityDocument = async (consumer, payload, file) => {
 	}
 
 	const { category, doctype, expiration_date } = payload
+
 	// Format expiration date
 	payload.expiration_date = moment(expiration_date, 'DD-MM-YYYY').format(
 		'YYYY-MM-DD'
 	)
+	console.log(payload)
 
+	// payload.expiration_date = IdentityDocument.toParseDate(expiration_date)
 	// Add additional file information into payload
 	payload.consumer = consumer
 	payload.filename = file.originalname
@@ -88,7 +92,7 @@ exports.addIdentityDocument = async (consumer, payload, file) => {
 	// Check if document already exists
 	if (await IdentityDocument.isDocumentExist(consumer, category, doctype)) {
 		logger.info('Identity document already exists, updating the document.')
-		await this.updateIdentityDocumentByDoc_type(
+		await this.updateIdentityDocumentByDocType(
 			consumer,
 			category,
 			doctype,
@@ -203,7 +207,7 @@ exports.updateIdentityDocumentByDocType = async (
  * @returns {Promise<object>} Confirmation message
  * @throws {ApiError} If given document type is not found or delete operation fails
  */
-exports.deleteIdentityDocumentByDoc_type = async (consumer, cat, doctype) => {
+exports.deleteIdentityDocumentByDocType = async (consumer, cat, doctype) => {
 	// Find the document first
 	const idoc = await IdentityDocument.findOne({
 		consumer,

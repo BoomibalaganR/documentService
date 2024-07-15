@@ -4,9 +4,8 @@ const { identitydocumentService } = require('../../../src/services') // Replace 
 
 jest.mock('../../../src/services/identitydocumentService')
 
-// Import test db connection
-const { clearDB, connectDB } = require('../../utils/setupDB')
 const httpStatus = require('http-status')
+const ApiError = require('../../../src/utils/ApiError')
 
 describe('getAllIdentityDocuments Controller', () => {
 	let req, res, next
@@ -20,10 +19,6 @@ describe('getAllIdentityDocuments Controller', () => {
 		res = httpMocks.createResponse()
 		next = jest.fn()
 	})
-
-	// setup the test db
-	beforeAll(connectDB)
-	afterAll(clearDB)
 
 	it('should fetch all identity documents', async () => {
 		// Mock service function
@@ -43,25 +38,21 @@ describe('getAllIdentityDocuments Controller', () => {
 		expect(res._getJSONData()).toEqual({ data: mockData })
 	})
 
-	// it('should handle errors when get all identity document', async () => {
-	// 	// Mock service function to throw an error
-	// 	const errorMessage = 'error fetching all identity document'
-	// 	identitydocumentService.getAllIdentityDocument.mockRejectedValue(
-	// 		new Error(errorMessage)
-	// 	)
+	it('should handle errors when get all identity documents', async () => {
+		// Mock service function to throw an error
+		const errorMessage = 'error fetching all identity documents'
+		const error = new ApiError(
+			httpStatus.INTERNAL_SERVER_ERROR,
+			errorMessage
+		)
+		identitydocumentService.getAllIdentityDocument.mockRejectedValue(error)
 
-	// 	// Call the controller function
-	// 	await identityDocumentController.getIdentityDocumentByDocType(
-	// 		req,
-	// 		res,
-	// 		next
-	// 	)
-	// 	console.log(res)
-	// 	// Assert the response
-	// 	expect(next).toHaveBeenCalledWith(expect.any(Error)) // Ensure next is called with an error
-	// 	expect(res.statusCode).not.toBe(httpStatus.OK) // Ensure status is not set to OK
-	// 	expect(res._getData()).toBe('')
-	// })
+		// Call the controller function
+		await identityDocumentController.getAllIdentityDocuments(req, res, next)
+
+		// Assert that next is called with the error
+		expect(next).toHaveBeenCalledWith(error)
+	})
 })
 
 describe('getIdentityDocumentByDocType Controller', () => {
@@ -78,10 +69,6 @@ describe('getIdentityDocumentByDocType Controller', () => {
 		// Mock the next function
 		next = jest.fn()
 	})
-
-	// setup the test db
-	beforeAll(connectDB)
-	afterAll(clearDB)
 
 	it('should fetch a identity documents based on docType', async () => {
 		// Mock service function
@@ -106,10 +93,6 @@ describe('getIdentityDocumentByDocType Controller', () => {
 
 describe('addIdentityDocument Controller', () => {
 	let req, res, next
-
-	/// setup the test db
-	beforeAll(connectDB)
-	afterAll(clearDB)
 
 	beforeEach(() => {
 		req = httpMocks.createRequest({
@@ -156,10 +139,6 @@ describe('addIdentityDocument Controller', () => {
 describe('updateIdentityDocument Controller', () => {
 	let req, res, next
 
-	// setup the test db
-	beforeAll(connectDB)
-	afterAll(clearDB)
-
 	beforeEach(() => {
 		req = httpMocks.createRequest({
 			user: { coffer_id: 'f5141f9ac440cd5e' },
@@ -181,6 +160,32 @@ describe('updateIdentityDocument Controller', () => {
 		)
 
 		await identityDocumentController.updateIdentityDocument(req, res, next)
+
+		expect(res.statusCode).toBe(httpStatus.OK)
+		expect(res._getJSONData()).toEqual(mockData)
+	})
+})
+
+describe('deleteIdentityDocument Controller', () => {
+	let req, res, next
+
+	beforeEach(() => {
+		req = httpMocks.createRequest({
+			user: { coffer_id: 'f5141f9ac440cd5e' },
+			params: { doctype: 'passport', cat: 'citzen_primary' },
+			body: { docid: '123456' },
+		})
+		res = httpMocks.createResponse()
+		next = jest.fn() // Mock next function for error handling
+	})
+
+	it('should delete an identity document and return success message', async () => {
+		const mockData = { message: 'Document deleted successfully' }
+		identitydocumentService.deleteIdentityDocumentByDocType.mockResolvedValue(
+			mockData
+		)
+
+		await identityDocumentController.deleteIdentityDocument(req, res, next)
 
 		expect(res.statusCode).toBe(httpStatus.OK)
 		expect(res._getJSONData()).toEqual(mockData)

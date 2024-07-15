@@ -26,18 +26,24 @@ module.exports = (err, req, res, next) => {
 
 	// Axios Error Handling
 	if (err.isAxiosError) {
-		console.log('axisos')
+		// Determine status code
 		const status = err.response
 			? err.response.status
 			: httpStatus.INTERNAL_SERVER_ERROR
-		const message = err.response.data.message
-			? err.response.data.message
-			: 'Internal Server Error'
+
+		// Determine error message
+		const message =
+			err.response && err.response.data && err.response.data.message
+				? err.response.data.message
+				: 'Internal Server Error'
+
+		// Log the error
 		logger.error(
-			`Error: Received ${err.response.status} response from server. Message: ${err.response.data}`
+			`Axios Error: Received ${status} response from server. Message: ${message}`
 		)
 
-		return res.status(status).json({ message: message })
+		// Respond with error message
+		return res.status(status).json({ message })
 	}
 
 	// Generic Error Handling
