@@ -17,7 +17,7 @@ exports.getAllIdentityDocuments = catchAsync(async (req, res, next) => {
 		category
 	)
 	console.log('data', data)
-	res.status(httpStatus.OK).json({ data: data })
+	res.status(httpStatus.OK).json(data)
 })
 
 /**
@@ -46,7 +46,7 @@ exports.getIdentityDocumentByDocId = catchAsync(async (req, res, next) => {
 	const data = await identitydocumentService.getIdentityDocumentByDocId(
 		doc_id
 	)
-
+	console.log(data)
 	res.status(httpStatus.OK).json(data)
 })
 

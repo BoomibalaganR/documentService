@@ -14,22 +14,19 @@ router.use((req, res, next) => {
 	next()
 })
 
-/**
- * Middleware to check category for the routes with ':cat' parameter.
- */
-router.use('/:cat', validCategory)
-
-router
-	.route('/doc/:doc_id')
-	.get(identityDocumentController.getIdentityDocumentByDocId) // Get all identity documents under the specified category
+router.get(
+	'/doc/:doc_id',
+	identityDocumentController.getIdentityDocumentByDocId
+) // Get specific identity document by doc id
 
 /**
  * Route to handle operations for all identity documents under a specific category.
  */
 router
 	.route('/:cat')
-	.get(identityDocumentController.getAllIdentityDocuments) // Get all identity documents under the specified category
+	.get(validCategory, identityDocumentController.getAllIdentityDocuments) // Get all identity documents under the specified category
 	.post(
+		validCategory,
 		validate(identityDocsValidation.addIdentitydocs), // Validate the request body
 		identityDocumentController.addIdentityDocument // Add identity document
 	)
@@ -39,11 +36,12 @@ router
  */
 router
 	.route('/:cat/:doctype')
-	.get(identityDocumentController.getIdentityDocumentByDocType) // Get an identity document by document type
+	.get(validCategory, identityDocumentController.getIdentityDocumentByDocType) // Get an identity document by document type
 	.put(
+		validCategory,
 		validate(identityDocsValidation.updateIdentitydocs), // Validate the request body
 		identityDocumentController.updateIdentityDocument // Update identity document
 	)
-	.delete(identityDocumentController.deleteIdentityDocument) // Delete an identity document by document type
+	.delete(validCategory, identityDocumentController.deleteIdentityDocument) // Delete an identity document by document type
 
 module.exports = router
