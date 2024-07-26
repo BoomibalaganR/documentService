@@ -8,7 +8,7 @@ const { catchAsync } = require('../utils/catchAsync')
  * @param {object} res - Express response object
  * @param {function} next - Express next middleware function
  */
-exports.checkCategory = catchAsync(async (req, res, next) => {
+exports.validCategory = catchAsync(async (req, res, next) => {
 	const category = req.params.cat
 	const authorizationHeader = req.headers['authorization']
 

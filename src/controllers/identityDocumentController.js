@@ -40,6 +40,16 @@ exports.getIdentityDocumentByDocType = catchAsync(async (req, res, next) => {
 	res.status(httpStatus.OK).json(data)
 })
 
+exports.getIdentityDocumentByDocId = catchAsync(async (req, res, next) => {
+	const doc_id = req.params.doc_id
+
+	const data = await identitydocumentService.getIdentityDocumentByDocId(
+		doc_id
+	)
+
+	res.status(httpStatus.OK).json(data)
+})
+
 /**
  * Add a new identity document for a specific user.
  *

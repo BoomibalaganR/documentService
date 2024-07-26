@@ -16,12 +16,12 @@ const moment = require('moment')
 exports.getAllIdentityDocument = async (consumer, category) => {
 	const idocs = await IdentityDocument.find({
 		consumer: consumer,
-		category: category,
+		category: category
 	})
 
 	// Iterate through each document and add URL
 	await Promise.all(
-		idocs.map(async (idoc) => {
+		idocs.map(async idoc => {
 			const url = await idoc.getViewUrl()
 			idoc._doc.url = url
 		})
@@ -44,10 +44,23 @@ exports.getIdentityDocumentByDocType = async (consumer, cat, doctype) => {
 	const idoc = await IdentityDocument.findOne({
 		consumer: consumer,
 		category: cat,
-		doctype: doctype,
+		doctype: doctype
 	})
 	if (!idoc) {
 		throw new ApiError(httpStatus.NOT_FOUND, 'Given doctype is not found')
+	}
+
+	// Get the signed URL
+	const url = await idoc.getViewUrl()
+	idoc._doc.url = url
+	logger.info('Successfully return identity document.')
+	return idoc
+}
+
+exports.getIdentityDocumentByDocId = async doc_id => {
+	const idoc = await IdentityDocument.findById(doc_id)
+	if (!idoc) {
+		throw new ApiError(httpStatus.NOT_FOUND, 'Document not found')
 	}
 
 	// Get the signed URL
@@ -112,7 +125,7 @@ exports.addIdentityDocument = async (consumer, payload, file) => {
 				message:
 					'Identity document created successfully under category',
 				data: createdDocument,
-				url: url,
+				url: url
 			}
 		} catch (uploadError) {
 			logger.error('Error uploading file to cloud storage:', uploadError)
@@ -148,7 +161,7 @@ exports.updateIdentityDocumentByDocType = async (
 	const originalDocument = await IdentityDocument.findOne({
 		consumer: consumer,
 		category: category,
-		doctype: doctype,
+		doctype: doctype
 	})
 	if (!originalDocument) {
 		throw new ApiError(httpStatus.NOT_FOUND, 'Given docType Not Found')
@@ -194,7 +207,7 @@ exports.updateIdentityDocumentByDocType = async (
 	return {
 		message: 'Successfully updated identity document in the database.',
 		data: updatedDocument,
-		url: await updatedDocument.getViewUrl(),
+		url: await updatedDocument.getViewUrl()
 	}
 }
 
@@ -212,7 +225,7 @@ exports.deleteIdentityDocumentByDocType = async (consumer, cat, doctype) => {
 	const idoc = await IdentityDocument.findOne({
 		consumer,
 		category: cat,
-		doctype: doctype,
+		doctype: doctype
 	})
 
 	if (!idoc) {

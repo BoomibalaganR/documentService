@@ -1,7 +1,8 @@
 const axios = require('axios')
 const logger = require('../../config/logger')
 
-const GATEWAY_URI = 'http://127.0.0.1:3001'
+const GATEWAY_URI =
+	'https://consumer-service-50021505566.development.catalystappsail.in'
 
 /**
  * Get category data from the consumer microservice.
@@ -15,8 +16,8 @@ exports.getCategory = async (cat, token) => {
 		`${GATEWAY_URI}/api/v1/consumers/citizenship/${cat}`,
 		{
 			headers: {
-				Authorization: token,
-			},
+				Authorization: token
+			}
 		}
 	)
 	logger.info(
