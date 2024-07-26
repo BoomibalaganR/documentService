@@ -1,0 +1,1112 @@
+openapi: 3.0.0
+info:
+    title: VitaGist APIs
+    version: '3.0'
+servers:
+    - url: https://consumer-service-xaup.onrender.com/api/v1/consumers
+      description: cloud Server
+    # - url: https://document-service-50021272554.development.catalystappsail.in/api/v1/documents
+    # #   description: cloudn Server
+    # - url: http://127.0.0.1:8080/api/v1/consumers
+    #   description: local Server
+    # - url: http://127.0.0.1:8080/api/v1/documents
+    #   description: local Server
+
+tags:
+    - name: 'login'
+      description: 'login'
+    - name: 'Citizenship'
+      description: 'All API related to citizenship'
+    - name: 'Document'
+      description: 'All API related to documents'
+    - name: 'Relationship'
+      description: 'All API related to relationship'
+    - name: 'spRelationship'
+      description: 'All API related to consumer relationship'
+
+paths:
+    /login:
+        post:
+            summary: 'consumer Login'
+            description: 'Endpoint to authenticate consumer'
+            tags:
+                - login
+            requestBody:
+                required: true
+                description: 'Login credentials'
+                content:
+                    application/json:
+                        schema:
+                            type: 'object'
+                            properties:
+                                action:
+                                    type: 'string'
+                                    description: 'Type of action'
+                                    example: 'login'
+                                logintype:
+                                    type: 'string'
+                                    description: 'Type of login'
+                                    example: 'email'
+                                email:
+                                    type: 'string'
+                                    format: 'email'
+                                    description: "User's email address"
+                                password:
+                                    type: 'string'
+                                    format: 'password'
+                                    description: "User's password"
+                        examples:
+                            firstExample:
+                                summary: 'boomibalagan login credentials'
+                                value:
+                                    action: 'login'
+                                    logintype: 'email'
+                                    email: 'boomibalagan001@gmail.com'
+                                    password: '#Boomi1234'
+                            secondExample:
+                                summary: 'bharathi login credentials'
+                                value:
+                                    action: 'login'
+                                    logintype: 'email'
+                                    email: 'bharathi@gmail.com'
+                                    password: 'dev123'
+            responses:
+                200:
+                    description: 'Successful login'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginResponse'
+                400:
+                    description: 'Invalid input'
+                401:
+                    description: 'Unauthorized'
+
+    /citizenship/{country}/affiliations:
+        get:
+            summary: Get citizenship affiliations for a country
+            tags:
+                - Citizenship
+            security:
+                - bearerAuth: []
+
+            parameters:
+                - name: country
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: India
+                  description: The country code or name to retrieve affiliations for.
+            responses:
+                '200':
+                    description: A list of citizenship affiliations
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/affilationResponse'
+
+                '400':
+                    description: Invalid country parameter
+
+                '404':
+                    description: Country not found
+
+    /citizenship:
+        get:
+            summary: get Consumer all Citizenship
+            tags:
+                - Citizenship
+            security:
+                - bearerAuth: []
+
+            responses:
+                '200':
+                    description: successfully get all citizenship
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/getAllCitizenship'
+                '400':
+                    description: Invalid input
+
+        post:
+            summary: Create Consumer Citizenship
+            tags:
+                - Citizenship
+            security:
+                - bearerAuth: []
+
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ConsumerCitizenship'
+            responses:
+                '200':
+                    description: Citizenship created successfully
+                '400':
+                    description: Invalid input/Too many citizenship
+
+    /citizenship/{cat}:
+        put:
+            summary: Update Consumer Citizenship
+            tags:
+                - Citizenship
+            security:
+                - bearerAuth: []
+
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: cat is required to update citizenship
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ConsumerCitizenship'
+            responses:
+                '200':
+                    description: Citizenship updated successfully
+                '400':
+                    description: Invalid input
+
+        delete:
+            summary: Delete Consumer Citizenship
+            tags:
+                - Citizenship
+            security:
+                - bearerAuth: []
+
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: cat is required to delete citizenship
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+            responses:
+                '200':
+                    description: Citizenship deleted successfully
+                '400':
+                    description: Invalid input
+
+    /identity/{cat}:
+        get:
+            summary: get all identity document under category
+            tags:
+                - 'Document'
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: cat is required to get document
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+
+            security:
+                - bearerAuth: []
+            responses:
+                '200':
+                    description: successfully get all dcoument
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DocAddResponse'
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+        post:
+            summary: Add identity document to specific category
+            description: Add identity document
+            tags:
+                - 'Document'
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: Category of the document
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - docid
+                                - doctype
+                                - expiration_date
+                                - filename
+                                - content_type
+                                - category
+                                - file
+                                - country
+                                - tags
+                            properties:
+                                docid:
+                                    type: string
+                                    example: '9999999999'
+                                doctype:
+                                    type: string
+                                    example: 'driver_license'
+                                expiration_date:
+                                    type: string
+                                    format: date
+                                    example: '2024-06-26'
+                                filename:
+                                    type: string
+                                    example: 'login_app (4).png'
+                                content_type:
+                                    type: string
+                                    example: 'image/png'
+                                category:
+                                    type: string
+                                    example: 'citizen_primary'
+                                file:
+                                    type: string
+                                    format: binary
+                                country:
+                                    type: string
+                                    example: 'India'
+                                tags:
+                                    type: array
+                                    items:
+                                        type: string
+                                    example: ['Identity']
+            responses:
+                '200':
+                    description: Document created successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DocCreateResponse'
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /identity/doc/{doc_id}:
+        get:
+            summary: get specific identity document by id
+            tags:
+                - 'Document'
+            parameters:
+                - name: doc_id
+                  in: path
+                  required: true
+                  description: id of the document
+                  schema:
+                      type: string
+                      example: 6672a7ffaeac634f1a8aba56
+            security:
+                - bearerAuth: []
+            responses:
+                '200':
+                    description: successfully get specific identity dcoument
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/documentsSchema'
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+    /identity/{cat}/{doc_type}:
+        get:
+            summary: get specific identity document under category
+            tags:
+                - 'Document'
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: cat is required to get document
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+                - name: doc_type
+                  in: path
+                  required: true
+                  description: Type of the document
+                  schema:
+                      type: string
+                      example: driving_license
+            security:
+                - bearerAuth: []
+            responses:
+                '200':
+                    description: successfully get specific identity dcoument
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/documentsSchema'
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+        put:
+            summary: Update specific identity document
+            description: Update an existing identity document
+            tags:
+                - 'Document'
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: Category of the document
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+                - name: doc_type
+                  in: path
+                  required: true
+                  description: Type of the document
+                  schema:
+                      type: string
+                      example: driving_license
+            security:
+                - bearerAuth: []
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - docid
+                                - tags
+                            properties:
+                                docid:
+                                    type: string
+                                    example: '9999999999'
+                                tags:
+                                    type: array
+                                    items:
+                                        type: string
+                                    example: ['Identity']
+            responses:
+                '200':
+                    description: Document updated successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DocUpdateResponse'
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+
+        delete:
+            summary: Delete specific identity document
+            description: Delete an existing identity document
+            tags:
+                - 'Document'
+            parameters:
+                - name: cat
+                  in: path
+                  required: true
+                  description: Category of the document
+                  schema:
+                      type: string
+                      enum:
+                          - citizen_primary
+                          - citizen_second
+                          - citizen_third
+                          - citizen_fourth
+                      example: citizen_primary
+                - name: doc_type
+                  in: path
+                  required: true
+                  description: Type of the document
+                  schema:
+                      type: string
+                      example: driving_license
+            security:
+                - bearerAuth: []
+            responses:
+                '200':
+                    description: Document deleted successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DocDeleteResponse'
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+    /relationships:
+        get:
+            summary: get all relationship
+            tags:
+                - Relationship
+            security:
+                - bearerAuth: []
+
+            responses:
+                200:
+                    description: Successfully retrieved the business information
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/getAllRelationshipResponse'
+
+                '400':
+                    description: Invalid input
+
+    /relationships/search/consumer:
+        get:
+            tags:
+                - Relationship
+            summary: get all consumer
+            security:
+                - bearerAuth: []
+
+            responses:
+                200:
+                    description: retrived successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/consumerListResponse'
+
+    /relationships/request:
+        post:
+            tags:
+                - Relationship
+
+            summary: relationship request to consumer
+            security:
+                - bearerAuth: []
+
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                consumerId:
+                                    type: string
+                                    example: 66979dae22fb9154859e1488
+                                description:
+                                    type: string
+                                    example: please accept request
+
+            responses:
+                200:
+                    description: request sent successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/successfullyRequestResponse'
+                400:
+                    description: relationship already exit
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RelationshipAlreadyExitResponse'
+
+    /relationships/{rel_id}/accept:
+        post:
+            tags:
+                - Relationship
+
+            summary: relationship request accept by a consumer
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: rel_id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: 66a080823afcca0ad77ed369
+
+            responses:
+                200:
+                    description: successfully accepted
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/relationshipAcceptResponse'
+
+    # /relationships/{rel_id}/reject:
+    #     post:
+    #         tags:
+    #             - Relationship
+
+    #         summary: Reject relationship request  by a consumer
+    #         security:
+    #             - bearerAuth: []
+    #         parameters:
+    #             - name: rel_id
+    #               in: path
+    #               required: true
+    #               schema:
+    #                   type: string
+    #                   example: 66a080823afcca0ad77ed369
+
+    #         responses:
+    #             200:
+    #                 description: successfully accepted
+    #                 content:
+    #                     application/json:
+    #                         schema:
+    #                             $ref: '#/components/schemas/relationshipAcceptResponse'
+
+    /relationships/{rel_id}/docs/share:
+        post:
+            tags:
+                - Relationship
+            summary: documents share with a consumer
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: rel_id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: 60f1a4f8b8d1a0001d71b1e2
+
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                add:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            doctype:
+                                                type: string
+                                                example: Personal
+                                            docid:
+                                                type: string
+                                                example: 66975832aeac634f1a8abc83
+
+            responses:
+                200:
+                    description: doc shared successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/shareRes'
+
+    /relationships/{rel_id}/docs/shared/byme:
+        get:
+            tags:
+                - Relationship
+            summary: documents share by me with a consumer
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: rel_id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: 60f1a4f8b8d1a0001d71b1e2
+
+            responses:
+                200:
+                    description: retrived successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/shareByMeRes'
+
+    /relationships/{rel_id}/docs/shared/withme:
+        get:
+            tags:
+                - Relationship
+            summary: documents share with me by a consumer
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: rel_id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: 60f1a4f8b8d1a0001d71b1e2
+
+            responses:
+                200:
+                    description: retrived successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/shareByMeRes'
+    /relationships/{rel_id}/{docid}/{action}:
+        get:
+            tags:
+                - Relationship
+            summary: documents with action
+            security:
+                - bearerAuth: []
+            parameters:
+                - name: rel_id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: 60f1a4f8b8d1a0001d71b1e2
+
+                - name: docid
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      example: 60f1a4f8b8d1a0001d71b1e2
+
+                - name: action
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+                      enum:
+                          - view
+                          - download
+
+            responses:
+                200:
+                    description: retrived successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/downloadresponse'
+
+components:
+    schemas:
+        getAllCitizenship:
+            type: array
+            items:
+                $ref: '#/components/schemas/ConsumerCitizenship'
+
+        ConsumerCitizenship:
+            type: object
+            properties:
+                country:
+                    type: string
+                    description: The country of the consumer
+                    example: 'brazil'
+                affiliation_type:
+                    type: string
+                    description: The affiliation type of the consumer
+                    example: 'dcitz'
+                home_address:
+                    type: string
+                    description: The home address of the consumer
+                    example: 'brazil home address'
+                mobile_phone:
+                    type: string
+                    description: The mobile phone number of the consumer
+                    example: '9488840673'
+                work_address:
+                    type: string
+                    description: The work address of the consumer
+                    nullable: true
+                    example: ''
+                work_phone:
+                    type: string
+                    description: The work phone number of the consumer
+                    nullable: true
+                    example: ''
+                alt_phone:
+                    type: string
+                    description: An alternative phone number for the consumer
+                    nullable: true
+                    example: ''
+            required:
+                - country
+                - affiliation_type
+                - home_address
+                - mobile_phone
+
+        affilationResponse:
+            type: object
+            properties:
+                error:
+                    type: boolean
+                    example: false
+                data:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            aflType:
+                                type: string
+                                example: pr
+                            aflName:
+                                type: string
+                                example: Permanent Resident
+
+        LoginResponse:
+            type: 'object'
+            properties:
+                error:
+                    type: 'boolean'
+                token:
+                    type: 'string'
+
+                data:
+                    type: 'object'
+                    properties:
+                        coffer_id:
+                            type: 'string'
+                            description: 'Coffer ID of the user'
+                        custom_uid:
+                            type: 'string'
+                            description: 'Custom user ID'
+                        first_name:
+                            type: 'string'
+                            description: "User's first name"
+                        last_name:
+                            type: 'string'
+                            description: "User's last name"
+                        email_verified:
+                            type: 'boolean'
+                            description: " user's email is verified"
+                        mobile_verified:
+                            type: 'boolean'
+                            description: " user's mobile number is verified"
+                        lastlogin:
+                            type: 'string'
+                            format: 'date-time'
+                            description: "user's last login"
+                        email:
+                            type: 'string'
+                            format: 'email'
+                            description: "User's email address"
+                        mobile:
+                            type: 'string'
+                            description: "User's mobile number"
+                        pk:
+                            type: 'string'
+                            description: 'Primary key of the user'
+        documentsSchema:
+            type: object
+            properties:
+                category:
+                    type: string
+                    example: 'citizen_primary'
+                doctype:
+                    type: string
+                    example: 'driver_license'
+                docid:
+                    type: string
+                    example: '888888888888'
+                expiration_date:
+                    type: string
+                    example: 'Jun 26, 2024'
+                content_type:
+                    type: string
+                    example: 'image/png'
+                filename:
+                    type: string
+                    example: 'login_app (4).png'
+                filesize:
+                    type: integer
+                    example: 158500
+                created:
+                    type: string
+                    example: 'Jun 19, 2024'
+                verification_status:
+                    type: string
+                    example: 'NotVerified'
+                validity_status:
+                    type: string
+                    example: 'Valid'
+                tags:
+                    type: array
+                    items:
+                        type: string
+                    example: ['Identity']
+                country:
+                    type: string
+                    example: 'India'
+                id:
+                    type: string
+                    example: '6672a7ffaeac634f1a8aba56'
+                url:
+                    type: string
+
+        DocAddResponse:
+            type: object
+            properties:
+                error:
+                    type: boolean
+                    example: false
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/documentsSchema'
+
+        DocCreateResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    example: true
+                message:
+                    type: string
+                    example: 'Document created successfully.'
+
+        DocDeleteResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    example: true
+                message:
+                    type: string
+                    example: 'Document deleted successfully.'
+        DocUpdateResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    example: true
+                message:
+                    type: string
+                    example: 'Document updated successfully.'
+
+        ErrorResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    example: false
+                message:
+                    type: string
+                    example: 'Invalid request.'
+
+        spRelationship:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: '66979dae22fb9154859e1488'
+                isSpecial:
+                    type: boolean
+                    example: true
+                canAccept:
+                    type: boolean
+                    example: true
+                business_name:
+                    type: string
+                    example: 'boomibalagan'
+                business_category:
+                    type: string
+                    example: ''
+                products:
+                    type: array
+                    items:
+                        type: string
+                    example: []
+                description:
+                    type: string
+                    example: ''
+                isaccepted:
+                    type: boolean
+                    example: false
+                isarchived:
+                    type: boolean
+                    example: false
+                status:
+                    type: string
+                    example: 'requested'
+                documents:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    example: {}
+                profile:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    example: {}
+                biztype:
+                    type: string
+                    example: 'consumer'
+                email:
+                    type: string
+                    example: ''
+                mobile:
+                    type: string
+                    example: ''
+                guid:
+                    type: string
+                    example: 'boomibalagandigicoffercom'
+                tags:
+                    type: array
+                    items:
+                        type: string
+                    example: ['Personal']
+                profileUrl:
+                    type: string
+                    example: ''
+
+        consumerListResponse:
+            type: object
+            properties:
+                consumers:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            firstName:
+                                type: string
+                                example: Bharathi
+                            lastName:
+                                type: string
+                                example: Ganesh
+                            email:
+                                type: string
+                                example: bharathi@gmail.com
+                            id:
+                                type: string
+                                example: 666c1502eeaec0bdc151425c
+
+        getAllRelationshipResponse:
+            type: object
+            properties:
+                error:
+                    type: boolean
+                    example: false
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/spRelationship'
+
+        successfullyRequestResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+                    example: Successfully send request.
+
+        RelationshipAlreadyExitResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+                    example: Relationship already Exit.
+
+        relationshipAcceptResponse:
+            type: object
+            properties:
+                msg:
+                    type: string
+                    example: Relationship status modified successfully.
+
+        shareRes:
+            type: object
+            properties:
+                msg:
+                    type: string
+                    example: Documents shared with consumer.
+
+        shareByMeRes:
+            type: object
+            properties:
+                data:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            docname:
+                                type: string
+                                example: pancard
+                            description:
+                                type: string
+                                example: ABCDE1234R
+                            docid:
+                                type: string
+                                example: 668281c4aeac634f1a8abb33
+                            doctype:
+                                type: string
+                                example: identity
+                            country_affiliation:
+                                type: string
+                                example: citizen_primary
+                            url:
+                                type: string
+                                example: url
+                            content_type:
+                                type: string
+                                example: image/png
+
+        downloadresponse:
+            type: object
+            properties:
+                url:
+                    type: string
+                    format: uri
+
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
