@@ -12,3 +12,7 @@ exports.identitydocumentService = require('./identitydocumentService')
  * Service module for handling storage operations.
  */
 exports.storageService = require('./storageService')
+
+exports.sharedDocumentService = require('./sharedDocumentService')
+
+exports.relationshipService = require('./relationshipService')

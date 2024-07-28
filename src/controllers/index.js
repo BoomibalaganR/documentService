@@ -9,3 +9,5 @@
  * @requires ./identityDocumentController
  */
 exports.identityDocumentController = require('./identityDocumentController')
+
+exports.sharedDocumentController = require('./sharedDocumentController')

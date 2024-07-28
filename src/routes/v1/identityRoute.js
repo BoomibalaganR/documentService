@@ -14,10 +14,10 @@ router.use((req, res, next) => {
 	next()
 })
 
-router.get(
-	'/doc/:doc_id',
-	identityDocumentController.getIdentityDocumentByDocId
-) // Get specific identity document by doc id
+// router.get(
+// 	'/doc/:doc_id',
+// 	identityDocumentController.getIdentityDocumentByDocId
+// ) // Get specific identity document by doc id
 
 /**
  * Route to handle operations for all identity documents under a specific category.

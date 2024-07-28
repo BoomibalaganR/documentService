@@ -9,4 +9,5 @@
  * @requires ./identity
  */
 
-exports.IdentityDocument = require('./identity')
+exports.IdentityDocument = require('./identity') 
+exports.SharedDocument = require('./sharedDocument')

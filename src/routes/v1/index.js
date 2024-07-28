@@ -1,5 +1,6 @@
 const express = require("express")
-const identityRoutes = require("./identityRoute")
+const identityRoutes = require("./identityRoute") 
+const sharedRoutes = require('./sharedRoute')
 const { authenticateToken } = require('../../middleware/authMiddleware')
 
 const router = express.Router()
@@ -13,6 +14,8 @@ router.use(authenticateToken)
  * Route to handle requests related to identity documents.
  * All routes in identityRoutes will be prefixed with '/identity'.
  */
-router.use('/identity', identityRoutes)
+router.use('/identity', identityRoutes)   
+
+routers.use('/shared', sharedRoutes) 
 
 module.exports = router

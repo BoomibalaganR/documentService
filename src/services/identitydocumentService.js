@@ -57,18 +57,18 @@ exports.getIdentityDocumentByDocType = async (consumer, cat, doctype) => {
 	return idoc
 }
 
-exports.getIdentityDocumentByDocId = async doc_id => {
-	const idoc = await IdentityDocument.findById(doc_id)
-	if (!idoc) {
-		throw new ApiError(httpStatus.NOT_FOUND, 'Document not found')
-	}
+// exports.getIdentityDocumentByDocId = async doc_id => {
+// 	const idoc = await IdentityDocument.findById(doc_id)
+// 	if (!idoc) {
+// 		throw new ApiError(httpStatus.NOT_FOUND, 'Document not found')
+// 	}
 
-	// Get the signed URL
-	const url = await idoc.getViewUrl()
-	idoc._doc.url = url
-	logger.info('Successfully return identity document.')
-	return idoc
-}
+// 	// Get the signed URL
+// 	const url = await idoc.getViewUrl()
+// 	idoc._doc.url = url
+// 	logger.info('Successfully return identity document.')
+// 	return idoc
+// }
 
 /**
  * Add an identity document for a specific consumer.

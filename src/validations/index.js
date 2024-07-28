@@ -1,1 +1,2 @@
-exports.identityDocsValidation = require('./identitydocs')
+exports.identityDocsValidation = require('./identitydocs') 
+exports.sharedDocsValidation = require('./sharedDocs')
