@@ -9,7 +9,7 @@ module.exports = (err, req, res, next) => {
 		const errors = {}
 		// console.log(err.details)
 		if (err.details) {
-			err.details.forEach((detail) => {
+			err.details.forEach(detail => {
 				errors[detail.path.join('.')] = detail.message
 			})
 		}
