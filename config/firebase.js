@@ -4,7 +4,7 @@ const PROJECT_ID = 'vitagist-consumer-docu'
 //const KEY = './serviceAccountKey.json' 
 const path = require('path');
 
-const KEY = path.resolve('/etc/secrets/config/serviceAccountKey.json');
+const KEY = path.resolve('/etc/secrets/serviceAccountKey.json');
 
 exports.getStorageClient = () => {
 	return new Storage({
