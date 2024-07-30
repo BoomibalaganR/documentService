@@ -52,7 +52,7 @@ exports.validateRelationship = async (coffer_id, rel_id, rel_type, token) => {
 	// 		requestor_uid: coffer_id,
 	// 		acceptor_uid: '1245666',
 	// 		status: 'accepted',
-	// 		isaccepted: false,
+	// 		isaccepted: true,
 	// 		description: 'please accept request'
 	// 	}
 	// }

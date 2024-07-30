@@ -10,7 +10,7 @@ const logger = require('../../config/logger')
  * @param {function} next - Express next middleware function
  */
 exports.checkValidRelationship = catchAsync(async (req, res, next) => {
-	const { rel_id, rel_type } = req.body
+	let { rel_id, rel_type } = req.body
 	if (!rel_id) {
 		rel_id = req.params.rel_id
 	}
