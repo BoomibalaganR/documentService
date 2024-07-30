@@ -2,9 +2,10 @@ const axios = require('axios')
 const logger = require('../../config/logger')
 const httpStatus = require('http-status')
 const ApiError = require('../utils/ApiError')
+const config = require('../../config/env')
 
-const GATEWAY_URI =
-	'https://consumer-service-50021505566.development.catalystappsail.in'
+const GATEWAY_URI = config.gatewayService.url
+//;('https://consumer-service-50021505566.development.catalystappsail.in')
 
 /**
  * Get category data from the consumer microservice.
@@ -69,10 +70,10 @@ exports.validateRelationship = async (coffer_id, rel_id, rel_type, token) => {
 	// }
 
 	// const response = await Promise.resolve(validatedMockData)
-	const CONSUMERSERVICE = 'http://127.0.0.1:3001'
+	// const CONSUMERSERVICE = 'http://127.0.0.1:3001'
 
 	const response = await axios.get(
-		`${CONSUMERSERVICE}/api/v1/consumers/relationships/${rel_id}`,
+		`${GATEWAY_URI}/api/v1/consumers/relationships/${rel_id}`,
 		{
 			headers: {
 				Authorization: token
