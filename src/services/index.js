@@ -14,5 +14,3 @@ exports.identitydocumentService = require('./identitydocumentService')
 exports.storageService = require('./storageService')
 
 exports.sharedDocumentService = require('./sharedDocumentService')
-
-exports.relationshipService = require('./relationshipService')
