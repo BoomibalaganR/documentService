@@ -3,7 +3,7 @@ const httpStatus = require('http-status')
 const logger = require('../../config/logger')
 
 module.exports = (err, req, res, next) => {
-	console.log(err)
+	// console.log(err)
 	// Validation Error Handling
 	if (err.name === 'ValidationError') {
 		const errors = {}

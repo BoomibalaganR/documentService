@@ -16,7 +16,7 @@ exports.getAllIdentityDocuments = catchAsync(async (req, res, next) => {
 		cofferId,
 		category
 	)
-	console.log('data', data)
+	// console.log('data', data)
 	res.status(httpStatus.OK).json(data)
 })
 

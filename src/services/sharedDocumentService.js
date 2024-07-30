@@ -32,7 +32,6 @@ exports.extractNonExistingDocIds = async (documents, coffer_id) => {
 }
 
 exports.shareDocuments = async (coffer_id, payload) => {
-	console.log('######>>>>>', payload)
 	const { rel_id, rel_type, documents, relationship } = payload
 
 	// Find non-existing document IDs
@@ -42,7 +41,6 @@ exports.shareDocuments = async (coffer_id, payload) => {
 	)
 	console.log(nonExistingDocIds)
 	if (nonExistingDocIds.length > 0) {
-		console.log('=======>>>>>Eroor')
 		throw new ApiError(
 			httpStatus.NOT_FOUND,
 			`Document(s) with ID(s) ${nonExistingDocIds.join(

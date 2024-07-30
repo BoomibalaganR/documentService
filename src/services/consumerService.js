@@ -45,33 +45,6 @@ exports.getConsumerByCoffer_id = async (coffer_id, token) => {
 }
 
 exports.validateRelationship = async (coffer_id, rel_id, rel_type, token) => {
-	//make external api call to relationship service
-	// const validatedMockData = {
-	// 	status: httpStatus.OK,
-	// 	data: {
-	// 		_id: rel_id,
-	// 		requestor_uid: coffer_id,
-	// 		acceptor_uid: '1245666',
-	// 		status: 'accepted',
-	// 		isaccepted: true,
-	// 		description: 'please accept request'
-	// 	}
-	// }
-	// const inValidatedMockData = {
-	// 	status: httpStatus.NOT_FOUND,
-	// 	data: {
-	// 		_id: rel_id,
-	// 		requestor_uid: coffer_id,
-	// 		acceptor_uid: '1245666',
-	// 		status: 'accepted',
-	// 		isaccepted: true,
-	// 		description: 'please accept request'
-	// 	}
-	// }
-
-	// const response = await Promise.resolve(validatedMockData)
-	// const CONSUMERSERVICE = 'http://127.0.0.1:3001'
-
 	const response = await axios.get(
 		`${GATEWAY_URI}/api/v1/consumers/relationships/${rel_id}`,
 		{
