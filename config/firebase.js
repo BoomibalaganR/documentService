@@ -1,10 +1,8 @@
-const { Storage } = require('@google-cloud/storage')
-// require('../serviceAccountKey.json')
-const PROJECT_ID = 'vitagist-consumer-docu'
-//const KEY = './serviceAccountKey.json'
 const path = require('path')
+const { Storage } = require('@google-cloud/storage')
 
-const KEY = path.resolve('/etc/secrets/serviceAccountKey.json')
+const PROJECT_ID = 'vitagist-consumer-docu'
+const KEY = path.resolve(process.cwd(), 'serviceAccountKey.json')
 
 exports.getStorageClient = () => {
 	return new Storage({
