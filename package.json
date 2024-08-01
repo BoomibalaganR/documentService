@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "src/server.js",
 	"scripts": {
-		"test": "jest --detectOpenHandles",
+		"test": "cross-env NODE_ENV=test jest --detectOpenHandles",
 		"start": "node src/server.js",
 		"dev": "cross-env NODE_ENV=development nodemon src/server.js",
 		"prod": "cross-env NODE_ENV=production node src/server.js"

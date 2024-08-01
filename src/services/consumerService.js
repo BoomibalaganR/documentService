@@ -4,8 +4,8 @@ const httpStatus = require('http-status')
 const ApiError = require('../utils/ApiError')
 const config = require('../../config/env')
 
-const GATEWAY_URI = config.gatewayService.url
-//;('https://consumer-service-50021505566.development.catalystappsail.in')
+const GATEWAY_URI = config.gatewayService.url || null
+//'https://consumer-service-50021505566.development.catalystappsail.in'
 
 /**
  * Get category data from the consumer microservice.

@@ -39,7 +39,7 @@ exports.shareDocuments = async (coffer_id, payload) => {
 		documents,
 		coffer_id
 	)
-	console.log(nonExistingDocIds)
+	// console.log(nonExistingDocIds)
 	if (nonExistingDocIds.length > 0) {
 		throw new ApiError(
 			httpStatus.NOT_FOUND,
@@ -70,7 +70,7 @@ exports.shareDocuments = async (coffer_id, payload) => {
 		})
 
 		if (!existingShare) {
-			const newSharedDocument = new SharedDocument({
+			const newSharedDocument = await SharedDocument.create({
 				relationship_id: rel_id,
 				doctype: doc.doc_type,
 				docid: doc.doc_id,
@@ -79,7 +79,7 @@ exports.shareDocuments = async (coffer_id, payload) => {
 				docversion: doc.docVersion || ''
 			})
 
-			await newSharedDocument.save()
+			// await newSharedDocument.save()
 		}
 	}
 
@@ -184,6 +184,7 @@ exports.getDocumentSharedByMe = async (coffer_id, rel_id) => {
 		}
 		return byMeDocs
 	} catch (error) {
+		console.log(error)
 		throw new ApiError(
 			httpStatus.INTERNAL_SERVER_ERROR,
 			'Failed to fetch shareByMe documents'
