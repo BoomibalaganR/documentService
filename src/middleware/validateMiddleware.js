@@ -10,10 +10,12 @@ const httpStatus = require('http-status')
 
 exports.validate = (schema, options = {}) => {
 	return async (req, res, next) => {
+		console.log(req.body.tags, typeof req.body.tags)
 		if (req.body.tags && typeof req.body.tags === 'string') {
 			try {
 				req.body.tags = JSON.parse(req.body.tags)
 			} catch (error) {
+				console.log(error)
 				return next(new Error('Invalid Array of string for tags'))
 			}
 		}

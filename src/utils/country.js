@@ -21,6 +21,7 @@ const COUNTRIES_IDOC_VALIDATE = {
 }
 
 exports.validateIdProof = (country, doctype, docid) => {
+	country = country.charAt(0).toUpperCase() + country.slice(1)
 	// console.log(country, doctype, docid)
 	if (COUNTRIES_IDOC_MAP[country] && COUNTRIES_IDOC_MAP[country][doctype]) {
 		const pattern = COUNTRIES_IDOC_VALIDATE[country][doctype]
@@ -32,10 +33,12 @@ exports.validateIdProof = (country, doctype, docid) => {
 }
 
 exports.validateDocType = (country, doctype) => {
+	country = country.charAt(0).toUpperCase() + country.slice(1)
 	// console.log(country, doctype)
 	const countryDocTypes = COUNTRIES_IDOC_MAP[country]
 
 	// Check if COUNTRIES_IDOC_MAP has the country and
 	//if doctype exists for that country
+	// console.log(countryDocTypes.hasOwnProperty(doctype))
 	return countryDocTypes && countryDocTypes.hasOwnProperty(doctype)
 }
